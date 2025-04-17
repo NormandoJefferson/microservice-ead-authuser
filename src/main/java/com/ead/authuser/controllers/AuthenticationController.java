@@ -26,6 +26,23 @@ public class AuthenticationController{
     @Autowired
     UserService userService;
 
+    /**
+     * Registra um novo usuário no sistema.
+     * <p>
+     * Recebe os dados de um usuário (DTO) através de uma solicitação POST, valida as informações
+     * fornecidas (como verificar se o nome de usuário e o email já estão em uso) e, em seguida, cria uma nova
+     * instância de {@link UserModel} para salvar no banco de dados. Após a criação, o usuário é registrado com o
+     * status {@link UserStatus#ACTIVE} e o tipo {@link UserType#STUDENT}. O evento de criação do usuário é
+     * gerenciado pelo {@link UserService}, que salva um novo usuário no banco e publica o evento no rabbitMQ.
+     * <p>
+     * Caso o nome de usuário ou o email já estejam cadastrados, é retornado um erro com o status HTTP 409
+     * (CONFLICT).
+     *
+     * @param userDto o objeto {@link UserDto} contendo as informações do usuário a ser registrado
+     * @return uma resposta HTTP contendo o status da operação e o objeto {@link UserModel} do usuário salvo,
+     *         com status HTTP 201 (CREATED) em caso de sucesso, ou status HTTP 409 (CONFLICT) em caso de
+     *         nome de usuário ou email já em uso.
+     */
     @PostMapping("/signup")
     public ResponseEntity<Object> registerUser(
             @RequestBody @Validated(UserDto.UserView.RegistrationPost.class)
@@ -45,7 +62,7 @@ public class AuthenticationController{
         userModel.setUserType(UserType.STUDENT);
         userModel.setCreationDate(LocalDateTime.now(ZoneId.of("UTC")));
         userModel.setLastUpdateDate(LocalDateTime.now(ZoneId.of("UTC")));
-        userService.save(userModel);
+        userService.saveUser(userModel);
         log.debug("POST registerUser userId saved {}", userModel.getUserId());
         log.info("User saved successfully userId {}", userModel.getUserId());
         return ResponseEntity.status(HttpStatus.CREATED).body(userModel);

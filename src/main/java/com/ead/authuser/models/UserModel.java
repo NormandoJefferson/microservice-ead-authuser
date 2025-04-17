@@ -1,11 +1,13 @@
 package com.ead.authuser.models;
 
+import com.ead.authuser.dtos.UserEventDto;
 import com.ead.authuser.enums.UserStatus;
 import com.ead.authuser.enums.UserType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import org.springframework.beans.BeanUtils;
 import org.springframework.hateoas.RepresentationModel;
 
 import javax.persistence.*;
@@ -61,5 +63,23 @@ public class UserModel extends RepresentationModel<UserModel> implements Seriali
     @Column(nullable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private LocalDateTime lastUpdateDate;
+
+    /**
+     * Converte a instância atual para um objeto {@link UserEventDto}.
+     * <p>
+     * Cria um novo {@link UserEventDto} e copia as propriedades da instância atual para ele
+     * utilizando {@link BeanUtils#copyProperties(Object, Object)}. Além disso, converte os valores das propriedades
+     * {@link #getUserType()} e {@link #getUserStatus()} para suas representações em {@link String},
+     * e as define nas respectivas propriedades do {@link UserEventDto}.
+     *
+     * @return uma instância de {@link UserEventDto} contendo os dados da instância atual
+     */
+    public UserEventDto convertToUserEventDto() {
+        var userEventDto = new UserEventDto();
+        BeanUtils.copyProperties(this, userEventDto);
+        userEventDto.setUserType(this.getUserType().toString());
+        userEventDto.setUserStatus(this.getUserStatus().toString());
+        return userEventDto;
+    }
 
 }
