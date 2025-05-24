@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @SpringBootApplication
-@EnableEurekaClient
+@EnableEurekaClient // Para transformar num eureka client.
 public class AuthuserApplication {
 
 	public static void main(String[] args) {

@@ -5,7 +5,7 @@ server:
 
 spring:
   application:
-    name: ead-authuser-service
+    name: ead-authuser-service # Nome da aplicação para o Eureka
   datasource:
     url: jdbc:postgresql://localhost:5432/ead-authuser
     username: postgres
@@ -40,7 +40,7 @@ ead:
 eureka:
   client:
     serviceUrl:
-      defaultZone: 'http://localhost:8761/eureka'
+      defaultZone: 'http://localhost:8761/eureka'  # Endereço onde o eureka está disponível.
   instance:
     hostname: localhost
 

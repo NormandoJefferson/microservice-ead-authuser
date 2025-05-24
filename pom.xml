@@ -26,10 +26,13 @@
 		<tag/>
 		<url/>
 	</scm>
+
+	<!--Versão do spring cloud-->
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>2020.0.4</spring-cloud.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -57,6 +60,7 @@
 			<artifactId>spring-boot-starter-hateoas</artifactId>
 		</dependency>
 
+		<!--Eureka client-->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
@@ -107,6 +111,7 @@
 		</dependency>
 	</dependencies>
 
+	<!--Gerenciador de dependências-->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
