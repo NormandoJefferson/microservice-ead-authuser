@@ -32,7 +32,7 @@ logging:
 ead:
   api:
     url:
-      course: 'http://ead-course-service/ead-course'
+      course: 'http://ead-course-service/ead-course' # Id/nome eureka de course (ead-course-service).
   broker:
     exchange:
       userEvent: ead.userevent

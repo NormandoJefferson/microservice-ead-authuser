@@ -9,15 +9,24 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Duration;
 
 /**
- * Classe de configuração responsável por criar e configurar uma instância de {@link RestTemplate}.
+ * Classe de configuração responsável por fornecer uma instância de {@link RestTemplate}
+ * com suporte a balanceamento de carga e timeout.
+ *
  * <p>
- * A configuração define um tempo de timeout de conexão e de leitura, e habilita o balanceamento de carga
- * entre instâncias de serviços registrados.
+ * A anotação {@link LoadBalanced} permite que o {@link RestTemplate} resolva nomes de serviço
+ * registrados em um serviço de descoberta (como o Eureka), possibilitando chamadas HTTP
+ * usando o nome lógico dos serviços.
  * </p>
  *
- * <p>Esta classe é marcada com a anotação {@link Configuration}, o que indica ao Spring que ela contém
- * definições de beans que devem ser gerenciados pelo contêiner de IoC.</p>
+ * <p>
+ * A instância criada também é configurada com timeouts de conexão e leitura, com o objetivo de evitar
+ * chamadas bloqueantes prolongadas em casos de lentidão ou indisponibilidade dos serviços externos.
+ * </p>
  *
+ * <p>
+ * O bean configurado pode ser injetado em outras partes da aplicação para facilitar integrações HTTP
+ * de forma resiliente e escalável.
+ * </p>
  */
 @Configuration
 public class RestTemplateConfig {
@@ -25,15 +34,16 @@ public class RestTemplateConfig {
     static final int TIMEOUT = 5000;
 
     /**
-     * Cria um bean {@link RestTemplate} com suporte a balanceamento de carga.
+     * Cria e registra um bean {@link RestTemplate} com suporte a balanceamento de carga e timeout.
+     *
      * <p>
-     * O {@code RestTemplate} criado usará os valores definidos para os timeouts de conexão e leitura.
-     * A anotação {@link LoadBalanced} permite que o {@code RestTemplate} utilize nomes de serviços
-     * ao fazer chamadas, com o balanceamento de carga sendo tratado automaticamente.
+     * O {@code RestTemplate} é configurado com um tempo máximo de 5 segundos tanto para
+     * a conexão quanto para a leitura da resposta. Isso ajuda a evitar travamentos caso o
+     * serviço externo esteja lento ou indisponível.
      * </p>
      *
-     * @param builder o {@link RestTemplateBuilder} injetado pelo Spring, usado para configurar o {@code RestTemplate}
-     * @return uma instância de {@link RestTemplate} configurada
+     * @param builder o {@link RestTemplateBuilder} injetado pelo Spring, usado para construir e configurar o {@code RestTemplate}
+     * @return uma instância de {@link RestTemplate} com balanceamento de carga e timeout aplicados
      */
     @Bean
     @LoadBalanced
