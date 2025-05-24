@@ -43,3 +43,10 @@ eureka:
       defaultZone: 'http://localhost:8761/eureka'
   instance:
     hostname: localhost
+
+resilience4j:
+  retry: # Seção de configuração para o mecanismo de retry do Resilience4j
+    instances: # Define múltiplas instâncias nomeadas de configuração de retry
+      retryInstance: # Nome da instância de retry
+        maxRetryAttempts: 3 # Número máximo de tentativas
+        waitDuration: 5s    # Intervalo de espera entre cada tentativa
